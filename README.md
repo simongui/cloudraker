@@ -1,2 +1,2 @@
 # Cloudraker
-Cloud raker is a MySQL docker clustering management tool.
+Cloudraker is a MySQL docker clustering management tool.
