@@ -1,0 +1,14 @@
+[server default]
+user=mha_admin
+password=password
+ssh_user=mha_user
+ssh_options='-i /home/mha_user/.ssh/id_rsa'
+master_binlog_dir=/data/mysql/logs
+remote_workdir=/data/mysql/tmp/mha
+manager_workdir=/var/log/mha
+ping_interval=2
+multi_tier_slave=1
+master_ip_failover_script=/usr/local/bin/mysql/mha/master_ip_failover_script
+master_ip_online_change_script=/usr/local/bin/mysql/mha/master_ip_online_change_script
+shutdown_script= /usr/local/bin/mysql/mha/shutdown_script
+report_script= /usr/local/bin/mysql/mha/report_script

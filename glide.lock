@@ -1,0 +1,62 @@
+hash: 16c38ed0a8749ca6c27a16b05cc6325ff320ef2989eacb631aadffc8a6cb4b7a
+updated: 2016-07-26T23:52:12.034384977-04:00
+imports:
+- name: github.com/alecthomas/template
+  version: a0175ee3bccc567396460bf5acd36800cb10c49c
+  subpackages:
+  - parse
+- name: github.com/alecthomas/units
+  version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
+- name: github.com/cheggaaa/pb
+  version: 9453b2db37f4d8bc63751daca63bbe7049eb5e74
+- name: github.com/docker/engine-api
+  version: 0df83fcc24fb4a997df5537526306fb55aa5dca8
+  subpackages:
+  - client
+  - types
+  - types/filters
+  - client/transport
+  - client/transport/cancellable
+  - types/container
+  - types/network
+  - types/registry
+  - types/time
+  - types/blkiodev
+  - types/strslice
+- name: github.com/docker/go-connections
+  version: 990a1a1a70b0da4c4cb70e117971a4f0babfbf1a
+  subpackages:
+  - sockets
+  - tlsconfig
+  - nat
+- name: github.com/docker/go-units
+  version: f2d77a61e3c169b43402a0a1e84f06daf29b8190
+- name: github.com/go-sql-driver/mysql
+  version: a732e14c62dde3285440047bba97581bc472ae18
+- name: github.com/jpillora/backoff
+  version: 0496a6c14df020789376f4d4a261273d5ddb36ec
+- name: github.com/mattn/go-runewidth
+  version: d6bea18f789704b5f83375793155289da36a3c7f
+- name: github.com/Microsoft/go-winio
+  version: ce2922f643c8fd76b46cadc7f404a06282678b34
+- name: github.com/olekukonko/tablewriter
+  version: daf2955e742cf123959884fdff4685aa79b63135
+- name: github.com/opencontainers/runc
+  version: fb221651e5120cd287a76c7c1b6c877520fbd034
+  subpackages:
+  - libcontainer/user
+- name: github.com/Sirupsen/logrus
+  version: a283a10442df8dc09befd873fab202bf8a253d6a
+- name: golang.org/x/net
+  version: 4d38db76854b199960801a1734443fd02870d7e1
+  subpackages:
+  - context
+  - proxy
+- name: golang.org/x/sys
+  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  subpackages:
+  - windows
+  - unix
+- name: gopkg.in/alecthomas/kingpin.v2
+  version: e5900212cbf65b181d3d8e08308ef06a01d117cf
+testImports: []

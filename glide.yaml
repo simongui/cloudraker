@@ -1,0 +1,19 @@
+package: .
+import:
+- package: github.com/docker/engine-api
+  version: ~0.3.3
+  subpackages:
+  - client
+  - types
+  - types/filters
+- package: github.com/go-sql-driver/mysql
+  version: ~1.2.0
+- package: github.com/olekukonko/tablewriter
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: gopkg.in/alecthomas/kingpin.v2
+  version: ~2.2.2
+- package: github.com/jpillora/backoff
+- package: github.com/cheggaaa/pb
+  version: ~1.0.5

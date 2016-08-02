@@ -1,0 +1,28 @@
+#!/bin/bash
+args=$(getopt -l "command:" -l "orig_master_host:" -l "orig_master_ip:" -l "orig_master_port:" -l "orig_master_user:" -l "orig_master_password:" -l "orig_master_ssh_user:" -l "new_master_host:" -l "new_master_ip:" -l "new_master_port:" -l "new_master_user:" -l "new_master_password:" -l "new_master_ssh_user:" -l "ssh_options:" -o "s:h" -- "$@")
+
+eval set -- "$args"
+
+while [ $# -ge 1 ]; do
+        case "$1" in
+                --)
+                    # No more options left.
+                    shift
+                    break
+                   ;;
+                -s|--orig_master_host)
+                        orig_master_host="$2"
+                        shift
+                        ;;
+                -h)
+                        echo "Display some help"
+                        exit 0
+                        ;;
+        esac
+
+        shift
+done
+
+#echo "remaining args: $*"
+echo "STONITH: $orig_master_host"
+#ssh -o StrictHostKeyChecking=no root@$orig_master_host "kill 1"
