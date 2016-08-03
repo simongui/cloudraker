@@ -1,6 +1,7 @@
 project = cloudraker
 projectpath = ${PWD}
 glidepath = ${PWD}/vendor/github.com/Masterminds/glide
+keyspath = ${PWD}/files/docker
 
 target:
 	@go build
@@ -18,14 +19,17 @@ install:
 	@cp files/my.cnf /usr/local/share/$(project)
 	@chmod -R 755 /usr/local/share/$(project)
 
+$(keyspath)/id_rsa:
+	ssh-keygen -t rsa -N "" -f files/docker/id_rsa
+
 builddockercontainer:
-	cd files/docker;docker build -t cloudraker/mysql-server:5.7 . > /dev/null 2> /dev/null;
+	cd files/docker;docker build -t cloudraker/mysql-server:5.7 .
 
 $(glidepath)/glide:
 	@git clone https://github.com/Masterminds/glide.git $(glidepath)
 	@cd $(glidepath);make build
 	@cp $(glidepath)/glide .
 
-deps: builddockercontainer $(glidepath)/glide
+deps: $(keyspath)/id_rsa builddockercontainer $(glidepath)/glide
 	@$(glidepath)/glide install
 	@sudo gem install ghost
