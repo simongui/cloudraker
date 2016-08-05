@@ -2,30 +2,28 @@ package commands
 
 import (
 	"fmt"
-	"os"
+	"net"
 
-	"github.com/cheggaaa/pb"
 	"github.com/simongui/cloudraker/containers"
 	"github.com/simongui/cloudraker/mysql"
-
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
-// AddCommand Context for "add" command
-type AddCommand struct {
+// AddContext Represents context information about the Add command.
+type AddContext struct {
+	// Progress   *pb.ProgressBar
 	Cluster    *string
 	Datacenter *string
 	Host       *string
 	IPAddress  *string
 	host       string
+	mysqlPort  int
+	sshPort    int
 	serverID   string
 }
 
-type addStepFunc func(cmd *AddCommand) error
-
-// Run Executes the command like action.
-func (cmd *AddCommand) Run(c *kingpin.ParseContext) error {
-	steps := []addStepFunc{
+// NewAddCommand Returns a new instance of Add Command.
+func NewAddCommand() *Command {
+	steps := []RunFunc{
 		containerExistsStep,
 		addContainerStep,
 		addToDockerNetworkStep,
@@ -35,75 +33,72 @@ func (cmd *AddCommand) Run(c *kingpin.ParseContext) error {
 		getMySQLResults,
 	}
 
-	progress := pb.New(len(steps)).Prefix(*cmd.Host)
-	progress.ShowTimeLeft = true
-	progress.ShowFinalTime = true
-
-	pool, err := pb.StartPool(progress)
-	if err != nil {
-		panic(err)
-	}
-
-	for i, step := range steps {
-		err := step(cmd)
-		if err != nil {
-			fmt.Printf("Failed step %d\n%s", i, err)
-			pool.Stop()
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		progress.Increment()
-	}
-	pool.Stop()
-
-	fmt.Printf("MySQL running \n\thost: %s\n\tid: %s", cmd.host, cmd.serverID)
-
-	return nil
+	cmd := NewCommand(steps)
+	return cmd
 }
 
-func containerExistsStep(cmd *AddCommand) error {
+func containerExistsStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+
 	// Check if the node is already added.
-	exists := containers.Exists(*cmd.Host)
+	exists := containers.Exists(*context.Host)
 	if exists {
-		return fmt.Errorf("%s is already a member of an existing cluster", *cmd.Host)
+		return fmt.Errorf("%s is already a member of an existing cluster", *context.Host)
 	}
 	return nil
 }
 
-func addContainerStep(cmd *AddCommand) error {
-	err := containers.Add(*cmd.Cluster, *cmd.Datacenter, *cmd.Host, *cmd.IPAddress)
+func addContainerStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+	ip := net.ParseIP(*context.IPAddress)
+	ip = ip.To4()
+	context.mysqlPort = 33300 + int(ip[3])
+	context.sshPort = 22200 + int(ip[3])
+
+	err := containers.Add(*context.Cluster, *context.Datacenter, *context.Host, *context.IPAddress, context.mysqlPort, context.sshPort)
 	return err
 }
 
-func addToDockerNetworkStep(cmd *AddCommand) error {
-	containers.AddToDockerNetwork(*cmd.Cluster, *cmd.Host)
+func addToDockerNetworkStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+
+	containers.AddToDockerNetwork(*context.Cluster, *context.Host)
 	return nil
 }
 
-func addIPAliasStep(cmd *AddCommand) error {
-	containers.AddIPAlias(*cmd.IPAddress)
+func addIPAliasStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+
+	containers.AddIPAlias(*context.IPAddress)
 	return nil
 }
 
-func addDNSStep(cmd *AddCommand) error {
-	containers.AddDNS(*cmd.Host, *cmd.IPAddress)
+func addDNSStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+	containers.AddDNS(*context.Host, *context.IPAddress)
 	return nil
 }
 
-func startSSHStep(cmd *AddCommand) error {
-	containers.StartSSH(*cmd.Host)
+func startSSHStep(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+	containers.StartSSH(*context.Host)
 	return nil
 }
 
-func getMySQLResults(cmd *AddCommand) error {
+func getMySQLResults(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+
 	var err error
-	cmd.host, err = mysql.GetHostname("shard0-db1.local1.com", 33301, "root", "password", "30s")
+	context.host, err = mysql.GetHostname(*context.Host, context.mysqlPort, "root", "password", "30s")
 	if err != nil {
 		return err
 	}
-	cmd.serverID, err = mysql.GetServerID("shard0-db1.local1.com", 33301, "root", "password", "30s")
+	context.serverID, err = mysql.GetServerID(*context.Host, context.mysqlPort, "root", "password", "30s")
 	if err != nil {
 		return err
 	}
+
+	finishText := fmt.Sprintf("MySQL running \n\thost: %s\n\tid: %s\n", context.host, context.serverID)
+	cmd.Results = append(cmd.Results, finishText)
 	return nil
 }

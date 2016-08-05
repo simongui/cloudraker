@@ -130,21 +130,19 @@ func GetHasProcess(host string, processName string) (bool, error) {
 }
 
 // Add Adds a new container to the specified cluster and datacenter.
-func Add(cluster string, datacenter string, host string, ipaddress string) error {
-	_, err := executeCommand("docker", []string{
+func Add(cluster string, datacenter string, host string, ipaddress string, mysqlPort int, sshPort int) error {
+	args := []string{
 		"run",
 		"--name",
 		host,
 		"--hostname",
 		host,
-		// "-v",
-		// "/usr/local/share/cloudraker/my.cnf:/etc/my.cnf",
 		"-e",
 		"MYSQL_ROOT_PASSWORD=password",
 		"-p",
-		"33301:3306",
+		fmt.Sprintf("%d:%d", mysqlPort, 3306),
 		"-p",
-		"22201:22",
+		fmt.Sprintf("%d:%d", sshPort, 22),
 		"--label",
 		fmt.Sprintf("%s=%s", DOCKERLABELCLUSTER, cluster),
 		"--label",
@@ -154,9 +152,12 @@ func Add(cluster string, datacenter string, host string, ipaddress string) error
 		"-d",
 		"cloudraker/mysql-server:5.7",
 		"--server-id=1",
-	})
+	}
+	_, err := executeCommand("docker", args)
 
 	if err != nil {
+		fmt.Println(args)
+		fmt.Println(err)
 		return err
 	}
 	return nil
@@ -226,6 +227,15 @@ func AddDNS(host string, ipaddress string) {
 		"add",
 		host,
 		ipaddress,
+	})
+}
+
+// RemoveDNS Removes the specified dns entry pointing to the specified IP address.
+func RemoveDNS(host string) {
+	executeCommand("sudo", []string{
+		"ghost",
+		"delete",
+		host,
 	})
 }
 

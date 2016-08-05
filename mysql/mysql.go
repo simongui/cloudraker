@@ -40,7 +40,7 @@ func GetServerID(host string, port int, username string, password string, timeou
 
 	rows.Next()
 	err = rows.Scan(&value)
-	fmt.Println(value)
+
 	if err != nil {
 		return "", err
 	}
