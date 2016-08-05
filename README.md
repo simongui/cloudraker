@@ -5,7 +5,8 @@ Cloudraker is something I created out of necessity while working on MySQL cluste
 
 # Features
 - Fast. You can add and remove 5 MySQL instances that replicate between each other in less than `30 seconds`.
-- Creates production like hostnames like `db1.us-east-1.com` that resolve to internal IP addresses.
+- Creates local IP aliases on 'lo0' on the specified subnet.
+- Creates production like hostnames like `db1.us-east-1.com` that resolve to the local IP address aliases created on 'lo0'.
 - Adds `sshd` to each container for SSH access.
 - Creates MySQL replication grants.
 
