@@ -8,10 +8,6 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-var (
-	removeHost *string
-)
-
 func main() {
 	app := kingpin.New("cluster", "Cluster management application.")
 
