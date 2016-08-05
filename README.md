@@ -11,7 +11,7 @@ Cloudraker is something I created out of necessity while working on MySQL cluste
 - Creates MySQL replication grants.
 
 # TODO
-- Replication
+- Replication.
 - Proxies local MySQL and SSH ports to the hostnames (`db1.us-east-1.com:3306`, `db2.us-east1.com:3306`) that routes to the proper container for production like testing.
 - Failure injection.
 - With SSH access to each MySQL instance already setup, the `MHA` failover tool could be supported.
