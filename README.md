@@ -16,6 +16,48 @@ Cloudraker is something I created out of necessity while working on MySQL cluste
 
 # Usage
 ```
+usage: cluster [<flags>] <command> [<args> ...]
+
+Cluster management application.
+
+Flags:
+  --help  Show context-sensitive help (also try --help-long and --help-man).
+
+Commands:
+  help [<command>...]
+    Show help.
+
+  ls [<flags>]
+    List nodes in a specific or all clusters.
+
+  add [<flags>]
+    Add a node to the specified cluster and datacenter.
+
+  addbatch [<flags>]
+    Add a batch of nodes to the specified cluster and datacenter.
+
+  remove [<flags>] [<host>]
+    Remove a node from the cluster.
+
+  removebatch [<flags>]
+    Add a batch of nodes to the specified cluster and datacenter.
+```
+
+#### Adding and removing a single node
+```
+$ sudo ./cloudraker add --cluster=cluster --datacenter=us-west-1 --host=shard0-db1.local1.com --ipaddress=10.0.0.1
+ 8 / 8 [====================================================================================] 100.00% 12s
+MySQL running
+	host: db6.us-east-1.com
+	id: 1
+	read_only: true
+	
+$ sudo ./cloudraker remove db6.us-east-1.com
+ 4 / 4 [====================================================================================] 100.00% 1s
+```
+
+
+```
 $ sudo ./cloudraker addbatch \
                     --nodes=5 \
                     --cluster=cluster \
