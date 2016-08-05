@@ -54,7 +54,7 @@ $ sudo ./cloudraker remove db6.us-east-1.com
  4 / 4 [====================================================================================] 100.00% 1s
 ```
 
-
+#### Adding and removing batches of nodes
 ```
 $ sudo ./cloudraker addbatch \
                     --nodes=5 \
