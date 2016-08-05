@@ -16,9 +16,7 @@ Cloudraker is something I created out of necessity while working on MySQL cluste
 
 # Usage
 ```
-usage: cluster [<flags>] <command> [<args> ...]
-
-Cluster management application.
+usage: cloudraker [<flags>] <command> [<args> ...]
 
 Flags:
   --help  Show context-sensitive help (also try --help-long and --help-man).
