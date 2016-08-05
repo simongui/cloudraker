@@ -45,11 +45,11 @@ Commands:
 
 #### Adding and removing a single node
 ```
-$ sudo ./cloudraker add --cluster=cluster --datacenter=us-west-1 --host=shard0-db1.local1.com --ipaddress=10.0.0.1
+$ sudo ./cloudraker add --cluster=cluster --datacenter=us-east-1 --host=db6.us-east-1.com --ipaddress=10.0.0.6
  8 / 8 [====================================================================================] 100.00% 12s
 MySQL running
 	host: db6.us-east-1.com
-	id: 1
+	id: 6
 	read_only: true
 	
 $ sudo ./cloudraker remove db6.us-east-1.com
