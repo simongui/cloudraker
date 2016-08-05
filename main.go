@@ -19,6 +19,7 @@ func main() {
 
 	addCommand := commands.NewAddCommand()
 	add := app.Command("add", "Add a node to the specified cluster and datacenter.").Action(addCommand.Run)
+	addCommand.RequiresSudo = true
 	addCommand.NoProgress = add.Flag("noprogress", "Suppress and hide the progress bar.").Bool()
 	addContext := commands.AddContext{
 		Cluster:    add.Flag("cluster", "Cluster to add the new node to.").String(),
@@ -30,6 +31,7 @@ func main() {
 
 	addBatchCommand := commands.NewAddBatchCommand()
 	addBatch := app.Command("addbatch", "Add a batch of nodes to the specified cluster and datacenter.").Action(addBatchCommand.Run)
+	addBatchCommand.RequiresSudo = true
 	addBatchCommand.NoProgress = addBatch.Flag("noprogress", "Suppress and hide the progress bar.").Bool()
 	addBatchContext := commands.AddBatchContext{
 		Nodes:      addBatch.Flag("nodes", "Number of nodes to add the cluster and datacenter.").Int(),
@@ -42,12 +44,14 @@ func main() {
 
 	removeCommand := commands.NewRemoveCommand()
 	remove := app.Command("remove", "Remove a node from the cluster.").Action(removeCommand.Run)
+	removeCommand.RequiresSudo = true
 	removeCommand.NoProgress = remove.Flag("noprogress", "Suppress and hide the progress bar.").Bool()
 	removeContext := commands.RemoveContext{Host: remove.Arg("host", "Host to remove from the cluster.").String()}
 	removeCommand.SetContext(&removeContext)
 
 	removeBatchCommand := commands.NewRemoveBatchCommand()
 	removeBatch := app.Command("removebatch", "Add a batch of nodes to the specified cluster and datacenter.").Action(removeBatchCommand.Run)
+	removeBatchCommand.RequiresSudo = true
 	removeBatchCommand.NoProgress = removeBatch.Flag("noprogress", "Suppress and hide the progress bar.").Bool()
 	removeBatchContext := commands.RemoveBatchContext{
 		Nodes:      removeBatch.Flag("nodes", "Number of nodes to add the cluster and datacenter.").Int(),

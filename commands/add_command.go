@@ -19,6 +19,7 @@ type AddContext struct {
 	mysqlPort  int
 	sshPort    int
 	serverID   string
+	readOnly   bool
 }
 
 // NewAddCommand Returns a new instance of Add Command.
@@ -30,6 +31,7 @@ func NewAddCommand() *Command {
 		addIPAliasStep,
 		addDNSStep,
 		startSSHStep,
+		setReplicationGrants,
 		getMySQLResults,
 	}
 
@@ -85,6 +87,15 @@ func startSSHStep(cmd *Command) error {
 	return nil
 }
 
+func setReplicationGrants(cmd *Command) error {
+	context, _ := cmd.Context.(*AddContext)
+	err := mysql.SetReplicationGrants(*context.Host, context.mysqlPort, "root", "password", "30s", "repl_user", "password")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func getMySQLResults(cmd *Command) error {
 	context, _ := cmd.Context.(*AddContext)
 
@@ -98,7 +109,16 @@ func getMySQLResults(cmd *Command) error {
 		return err
 	}
 
-	finishText := fmt.Sprintf("MySQL running \n\thost: %s\n\tid: %s\n", context.host, context.serverID)
+	context.readOnly, err = mysql.GetReadOnly(*context.Host, context.mysqlPort, "root", "password", "30s")
+	if err != nil {
+		return err
+	}
+
+	finishText := fmt.Sprintf("MySQL running \n\thost: %s\n\tid: %s\n\tread_only: %t\n",
+		context.host,
+		context.serverID,
+		context.readOnly)
+
 	cmd.Results = append(cmd.Results, finishText)
 	return nil
 }

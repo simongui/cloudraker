@@ -23,6 +23,7 @@ type Command struct {
 	Context       interface{}
 	NoProgress    *bool
 	IsSubCommand  bool
+	RequiresSudo  bool
 }
 
 // NewCommand Returns a new instance of Command.
@@ -42,6 +43,12 @@ func (cmd *Command) SetContext(context interface{}) {
 
 // Run Executes the command.
 func (cmd *Command) Run(c *kingpin.ParseContext) error {
+	if cmd.RequiresSudo == true {
+		if os.Geteuid() != 0 {
+			fmt.Println("Must run as superuser (root).")
+			os.Exit(1)
+		}
+	}
 	progress := pb.New(cmd.NumberOfSteps)
 	progress.ShowTimeLeft = true
 	progress.ShowFinalTime = true
