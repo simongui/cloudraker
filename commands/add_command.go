@@ -89,7 +89,7 @@ func startSSHStep(cmd *Command) error {
 
 func setReplicationGrants(cmd *Command) error {
 	context, _ := cmd.Context.(*AddContext)
-	err := mysql.SetReplicationGrants(*context.Host, context.mysqlPort, "root", "password", "30s", "repl_user", "password")
+	err := mysql.SetReplicationGrants(*context.Host, context.mysqlPort, "root", "password", "10s", "repl_user", "password")
 	if err != nil {
 		return err
 	}
@@ -100,16 +100,16 @@ func getMySQLResults(cmd *Command) error {
 	context, _ := cmd.Context.(*AddContext)
 
 	var err error
-	context.host, err = mysql.GetHostname(*context.Host, context.mysqlPort, "root", "password", "30s")
+	context.host, err = mysql.GetHostname(*context.Host, context.mysqlPort, "root", "password", "10s")
 	if err != nil {
 		return err
 	}
-	context.serverID, err = mysql.GetServerID(*context.Host, context.mysqlPort, "root", "password", "30s")
+	context.serverID, err = mysql.GetServerID(*context.Host, context.mysqlPort, "root", "password", "10s")
 	if err != nil {
 		return err
 	}
 
-	context.readOnly, err = mysql.GetReadOnly(*context.Host, context.mysqlPort, "root", "password", "30s")
+	context.readOnly, err = mysql.GetReadOnly(*context.Host, context.mysqlPort, "root", "password", "10s")
 	if err != nil {
 		return err
 	}

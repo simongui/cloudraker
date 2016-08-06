@@ -31,7 +31,7 @@ func OpenConnection(host string, port int, username string, password string, tim
 func GetQueryResponse(host string, port int, username string, password string, timeout string, sql string) (*sql.Rows, error) {
 	backoff := &backoff.Backoff{
 		Min:    100 * time.Millisecond,
-		Max:    10 * time.Second,
+		Max:    2 * time.Second,
 		Factor: 2,
 		Jitter: true,
 	}

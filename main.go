@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	app := kingpin.New("cluster", "Cluster management application.")
+	app := kingpin.New("cloudraker", "MySQL cluster manager.")
 
 	lsCommand := &commands.LsCommand{}
 	ls := app.Command("ls", "List nodes in a specific or all clusters.").Action(lsCommand.Run)
