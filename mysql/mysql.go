@@ -9,6 +9,15 @@ import (
 	"github.com/jpillora/backoff"
 )
 
+// GetMasterStatusResult Represents the response from a 'show master status' MySQL query.
+type GetMasterStatusResult struct {
+	BinlogFile      string
+	BinlogPos       int
+	BinlogDoDB      string
+	BinlogIgnoreDB  string
+	ExecutedGtidSet string
+}
+
 type nullLogger struct{}
 
 // Print Prints the log output.
@@ -144,6 +153,7 @@ func GetReadOnly(host string, port int, username string, password string, timeou
 }
 
 // SetReadOnly Sets the specified MySQL instance as read_only.
+// show master status
 func SetReadOnly(host string, port int, username string, password string, timeout string, readOnly bool) error {
 	readOnlyValue := 0
 	if readOnly == true {
@@ -157,4 +167,31 @@ func SetReadOnly(host string, port int, username string, password string, timeou
 		return err
 	}
 	return nil
+}
+
+// GetMasterStatus Returns the binlog and binlog position from the specified host.
+// show master status
+func GetMasterStatus(host string, port int, username string, password string, timeout string) (*GetMasterStatusResult, error) {
+	var result = &GetMasterStatusResult{}
+
+	rows, err := GetQueryResponse(host, port, username, password, timeout, "show master status;")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	rows.Next()
+
+	err = rows.Scan(&result.BinlogFile, &result.BinlogPos, &result.BinlogDoDB, &result.BinlogIgnoreDB, &result.ExecutedGtidSet)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+
 }
