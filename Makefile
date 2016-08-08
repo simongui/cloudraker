@@ -31,7 +31,7 @@ $(glidepath)/glide:
 	cp $(glidepath)/glide .
 
 libs: $(glidepath)/glide
+	$(glidepath)/glide install
 
 deps: $(keyspath)/id_rsa builddockercontainer libs
-	$(glidepath)/glide install
 	sudo gem install ghost
