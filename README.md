@@ -1,5 +1,5 @@
 <img src="cloudraker.png"/>
-
+[![Build Status](https://travis-ci.org/simongui/cloudraker?branch=master)](https://travis-ci.org/simongui/cloudraker)
 Cloudraker is a MySQL cluster management tool for macOS using Docker for Mac. Cloudraker makes it easy to work with a cluster of MySQL instances that can replicate between each other.
 
 Cloudraker is something I created out of necessity while working on MySQL clusters in development. I wanted a local development environment that could be created quickly and closely match what was in production for shards, datacenters and replication topologies.
@@ -52,7 +52,7 @@ MySQL running
 	host: db6.us-east-1.com
 	id: 6
 	read_only: true
-	
+
 $ sudo ./cloudraker remove db6.us-east-1.com
  4 / 4 [====================================================================================] 100.00% 1s
 ```
@@ -65,7 +65,7 @@ $ sudo ./cloudraker addbatch \
                     --datacenter=us-east-1 \
                     --hostformat=db%d.us-east-1.com \
                     --subnet=10.0.0.
-                    
+
  41 / 41 [====================================================================================] 100.00% 22s
 
 $ cloudraker ls
@@ -80,7 +80,7 @@ $ cloudraker ls
 +---------+-------------------+-----------+----------+
                                   NODES   |    5
                               +-----------+----------+
-                              
+
 $ sudo ./cloudraker removebatch --nodes=5 --hostformat=db%d.us-east-1.com
 21 / 21 [====================================================================================]  100.00% 5s
 
