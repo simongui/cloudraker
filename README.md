@@ -1,5 +1,5 @@
 <img src="cloudraker.png"/>
-[![Build Status](https://travis-ci.org/simongui/cloudraker?branch=master)](https://travis-ci.org/simongui/cloudraker)
+[![Build Status](https://travis-ci.org/simongui/cloudraker.svg?branch=master)](https://travis-ci.org/simongui/cloudraker)
 Cloudraker is a MySQL cluster management tool for macOS using Docker for Mac. Cloudraker makes it easy to work with a cluster of MySQL instances that can replicate between each other.
 
 Cloudraker is something I created out of necessity while working on MySQL clusters in development. I wanted a local development environment that could be created quickly and closely match what was in production for shards, datacenters and replication topologies.
