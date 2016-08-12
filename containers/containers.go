@@ -170,7 +170,9 @@ func StartSSH(host string) {
 		executeCommand("docker", []string{
 			"exec",
 			host,
-			"/usr/sbin/sshd",
+			"service",
+			"ssh",
+			"start",
 		})
 		running, _ = GetHasProcess(host, "/usr/sbin/sshd")
 	}
