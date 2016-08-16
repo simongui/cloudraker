@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"runtime"
 
 	"golang.org/x/net/context"
 
@@ -204,22 +205,40 @@ func RemoveDockerNetwork(network string) {
 
 // AddIPAlias Adds an alias for the specified IP address to the loopback adapter.
 func AddIPAlias(ipaddress string) {
-	executeCommand("sudo", []string{
-		"ifconfig",
-		"lo0",
-		ipaddress,
-		"alias",
-	})
+	if runtime.GOOS == "linux" {
+		executeCommand("sudo", []string{
+			"ifconfig",
+			"lo:0",
+			ipaddress,
+			"up",
+		})
+	} else if runtime.GOOS == "darwin" {
+		executeCommand("sudo", []string{
+			"ifconfig",
+			"lo0",
+			ipaddress,
+			"alias",
+		})
+	}
 }
 
 // RemoveIPAlias Removes the specified IP address alias from the loopback adapter.
 func RemoveIPAlias(ipaddress string) {
-	executeCommand("sudo", []string{
-		"ifconfig",
-		"lo0",
-		ipaddress,
-		"delete",
-	})
+	if runtime.GOOS == "linux" {
+		executeCommand("sudo", []string{
+			"ifconfig",
+			"lo:0",
+			ipaddress,
+			"down",
+		})
+	} else if runtime.GOOS == "darwin" {
+		executeCommand("sudo", []string{
+			"ifconfig",
+			"lo0",
+			ipaddress,
+			"delete",
+		})
+	}
 }
 
 // AddDNS Adds the specified dns entry pointing to the specified IP address.
