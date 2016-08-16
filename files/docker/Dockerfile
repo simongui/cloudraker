@@ -9,6 +9,8 @@ COPY id_rsa.pub /etc/ssh/ssh_host_rsa_key.pub
 COPY ssh_config /etc/ssh/ssh_config
 COPY sshd_config /etc/ssh/sshd_config
 RUN chmod -R 400 /etc/ssh
+COPY bench.sh /root
+RUN chmod +x /root/bench.sh
 
 # root setup
 RUN mkdir /root/.ssh
