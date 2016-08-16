@@ -122,7 +122,8 @@ func GetHasProcess(host string, processName string) (bool, error) {
 	processes, err := GetProcesses(host)
 	var hasProcess = false
 	for _, process := range processes.Processes {
-		if process[3] == processName {
+		args := len(process)
+		if process[args-1] == processName {
 			hasProcess = true
 			break
 		}
